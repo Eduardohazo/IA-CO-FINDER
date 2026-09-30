@@ -16,7 +16,7 @@ const files = new Map(); // id -> buffer (en memoria)
 app.use(express.json());
 
 // const allowedOrigins = ['http://127.0.0.1']; // On Development ***
-const allowedOrigins = ["https://cofinder.netlify.app"]; // On Production ***
+const allowedOrigins = ["https://cofinder01.netlify.app"]; // On Production ***
 
 const corsOptions = {
   origin: function (origin, callback) {
