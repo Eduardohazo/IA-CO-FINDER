@@ -13,8 +13,25 @@ const SEARCH_MODEL = process.env.GROQ_SEARCH_MODEL || 'groq/compound';
 const groq = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
 const files = new Map(); // id -> buffer (en memoria)
 
-app.use(cors());
 app.use(express.json());
+
+// const allowedOrigins = ['http://127.0.0.1']; // On Development ***
+const allowedOrigins = ["https://cofinder.netlify.app"]; // On Production ***
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// app.use(cors()); // On Development ***
+app.use(cors(corsOptions)); // On Production ***
 
 const AGENT_PROMPT = `Eres co-finder, un agente amable que ayuda a encontrar empresas. Hablas en español, con mensajes cortos y naturales.
 Necesitas tres datos: 1) giro de la empresa, 2) ciudad, 3) tamaño. Solo hay dos bandas válidas: "250-1000" empleados o "más de 1000" empleados.
